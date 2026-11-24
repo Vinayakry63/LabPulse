@@ -15,7 +15,7 @@ Hands-on lab runtimes post events (`lab.started`, `step.completed`, `lab.error`,
 - [Limitations](#known-limitations) and [What I would do with another week](#what-i-would-do-with-another-week)
 - [Repository layout](#repository-layout) and [Troubleshooting](#troubleshooting)
 
-Design rationale, failure modes and the 50,000-connection plan are in [`docs/DESIGN.md`](docs/DESIGN.md). A demo script and Q&A preparation for the live session are in [`docs/DEMO.md`](docs/DEMO.md).
+Design rationale, failure modes and the 50,000-connection plan are in [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ---
 
@@ -93,7 +93,7 @@ To stop: `docker compose down` (keeps data) or `docker compose down -v` (also wi
 | **C3** | Tool routing for failure questions; tenant-safe; event text treated as untrusted | `assistant/tools.ts`, `orchestrator.ts` |
 | **C4** | Ten Q&A pairs; retrieval hit rate and groundedness script (stretch) | `backend/eval/qa.json`, `scripts/eval.ts` |
 
-Deliverables: this repository with a one-command `docker compose up`; this README; the design note [`docs/DESIGN.md`](docs/DESIGN.md); automated tests proving isolation, catch-up without duplicates and the alert rule ([Testing](#testing-and-verification)); and a demo guide [`docs/DEMO.md`](docs/DEMO.md).
+Deliverables: this repository with a one-command `docker compose up`; this README; the design note [`docs/DESIGN.md`](docs/DESIGN.md); automated tests proving isolation, catch-up without duplicates and the alert rule ([Testing](#testing-and-verification));
 
 ---
 
