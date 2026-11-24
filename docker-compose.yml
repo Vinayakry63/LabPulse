@@ -1,0 +1,90 @@
+name: labpulse
+
+x-backend: &backend
+  build:
+    context: .
+    dockerfile: backend/Dockerfile
+  environment: &backend-env
+    DATABASE_URL: postgres://labpulse:labpulse@postgres:5432/labpulse
+    REDIS_URL: redis://redis:6379
+    JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+    INGEST_API_KEY: ${INGEST_API_KEY:-dev-ingest-key}
+    DEV_AUTH: ${DEV_AUTH:-true}
+    OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    LLM_PROVIDER: ${LLM_PROVIDER:-}
+    OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
+    OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+    OPENAI_EMBEDDING_DIMENSIONS: ${OPENAI_EMBEDDING_DIMENSIONS:-}
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+    init: { condition: service_completed_successfully }
+  healthcheck:
+    test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+    interval: 5s
+    timeout: 3s
+    retries: 10
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: labpulse
+      POSTGRES_PASSWORD: labpulse
+      POSTGRES_DB: labpulse
+    ports: ["127.0.0.1:5433:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labpulse -d labpulse"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports: ["127.0.0.1:6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # one-shot: schema migration + lab guide ingestion (re-run with `docker compose run --rm init node dist/scripts/init.js --force` after adding an OpenAI key)
+  init:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["node", "dist/scripts/init.js"]
+    environment: *backend-env
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: "no"
+
+  backend1:
+    <<: *backend
+    environment:
+      <<: *backend-env
+      INSTANCE_ID: backend-1
+
+  backend2:
+    <<: *backend
+    environment:
+      <<: *backend-env
+      INSTANCE_ID: backend-2
+
+  lb:
+    image: nginx:1.27-alpine
+    volumes: ["./nginx/lb.conf:/etc/nginx/conf.d/default.conf:ro"]
+    ports: ["8080:80"]
+    depends_on:
+      backend1: { condition: service_healthy }
+      backend2: { condition: service_healthy }
+
+  frontend:
+    build:
+      context: ./frontend
+    ports: ["5173:80"]
+    depends_on: [lb]
+
+volumes:
+  pgdata:

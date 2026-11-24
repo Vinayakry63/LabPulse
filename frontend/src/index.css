@@ -1,0 +1,81 @@
+:root {
+  --bg: #f4f6fa; --card: #fff; --text: #1b2433; --muted: #6b778c; --line: #e3e8ef;
+  --brand: #2f5bea; --ok: #1a9d6a; --warn: #d98a00; --bad: #d64545; --idle: #8792a5;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f141d; --card: #171e2b; --text: #e6ebf3; --muted: #93a0b5; --line: #263044; --brand: #6c8cff; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+h1, h2 { margin: 0; } h2 { font-size: 15px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { border: 1px solid var(--line); background: var(--card); padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--brand); } button:disabled { opacity: .5; cursor: default; }
+button.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+input, select, textarea { border: 1px solid var(--line); background: var(--bg); padding: 7px 10px; border-radius: 8px; width: 100%; }
+.muted { color: var(--muted); } .error { color: var(--bad); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 12px; }
+
+.login { max-width: 420px; margin: 8vh auto; padding: 0 16px; } .login .card { display: grid; gap: 12px; margin-top: 16px; }
+.login label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { border-radius: 999px; font-size: 12.5px; padding: 4px 10px; } .chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+header { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; flex-wrap: wrap; gap: 8px; }
+.brand { display: flex; align-items: center; gap: 10px; } .brand strong { font-size: 17px; }
+.tenant { font-weight: 600; background: color-mix(in srgb, var(--brand) 14%, transparent); color: var(--brand); padding: 3px 10px; border-radius: 999px; }
+.role { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.head-right { display: flex; align-items: center; gap: 10px; }
+.bell { position: relative; } .badge { background: var(--bad); color: #fff; border-radius: 999px; font-size: 11px; padding: 1px 6px; margin-left: 4px; font-weight: 600; }
+.bell .badge { position: absolute; top: -6px; right: -6px; margin: 0; }
+
+.conn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+.conn small { font-weight: 400; color: var(--muted); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--idle); }
+.conn.live .dot { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.conn.catching_up .dot, .conn.connecting .dot { background: var(--warn); animation: pulse 1s infinite; }
+.conn.reconnecting .dot, .conn.unauthorized .dot { background: var(--bad); animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 18px 20px; align-items: start; }
+/* the right-hand column is as tall as the viewport, so the assistant fills the space below the alerts */
+aside { position: sticky; top: 79px; height: calc(100vh - 97px); display: flex; flex-direction: column; min-height: 0; }
+aside .card:last-child { margin-bottom: 0; }
+.toolbar { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; } .toolbar label { display: flex; gap: 8px; align-items: center; font-size: 13px; } .toolbar select { width: auto; }
+.empty { text-align: center; color: var(--muted); padding: 40px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+th, td { padding: 8px 6px; border-bottom: 1px solid var(--line); } tr:last-child td { border-bottom: 0; }
+.summary { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: color-mix(in srgb, var(--idle) 16%, transparent); color: var(--idle); white-space: nowrap; }
+.pill.in_progress { background: color-mix(in srgb, var(--brand) 16%, transparent); color: var(--brand); }
+.pill.completed { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.pill.error { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
+.pill.timeout { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+
+.alerts { flex: 0 0 auto; max-height: 40%; display: flex; flex-direction: column; min-height: 0; }
+.alerts ul { list-style: none; margin: 0; padding: 0; overflow: auto; min-height: 0; }
+.alerts li { padding: 9px 10px; border-radius: 8px; border-left: 3px solid var(--line); margin-bottom: 6px; font-size: 13px; }
+.alerts li.unread { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 8%, transparent); }
+
+.card.assistant { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; } /* .card only: chat messages are also .msg.assistant */
+.assistant h2 { margin-bottom: 10px; }
+.assistant .msgs { flex: 1 1 0; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; padding-right: 2px; }
+.assistant .msgs > * { flex-shrink: 0; } /* never squash a message: the list scrolls instead */
+.suggestions { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 10px; }
+.suggestions .chip { text-align: left; border-radius: 12px; line-height: 1.35; padding: 7px 12px; }
+.assistant form { display: flex; gap: 8px; } .assistant input { flex: 1; }
+.msg .bubble { padding: 8px 12px; border-radius: 12px; font-size: 13.5px; white-space: pre-wrap; background: var(--bg); }
+.msg.user .bubble { background: var(--brand); color: #fff; margin-left: 40px; }
+.tag { font-size: 11px; color: var(--ok); font-weight: 600; } .cites { margin: 6px 0 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
+
+/* keep last: must come after the base rules it overrides */
+@media (max-width: 1000px) {
+  main { grid-template-columns: 1fr; }
+  aside { position: static; height: auto; }
+  .alerts { max-height: none; }
+  .card.assistant { flex: 0 0 auto; }
+  .assistant .msgs { flex: 0 1 auto; max-height: 60vh; min-height: 160px; }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "labpulse-verify",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "browser": "node browser-e2e.mjs",
+    "fault:redis": "node fault-redis.mjs",
+    "fault:pg": "node fault-pg.mjs",
+    "ui": "node ui-check.mjs",
+    "probes": "node probes.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.0.0",
+    "socket.io-client": "^4.8.4"
+  }
+}

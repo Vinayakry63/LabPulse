@@ -1,0 +1,20 @@
+{
+  "inScope": [
+    { "q": "What Azure CLI command deploys a Bicep file to a resource group?", "mustContain": "az deployment group create" },
+    { "q": "What does the uniqueString function do, and why is resourceGroup().id used as its seed?", "mustContain": "uniquestring" },
+    { "q": "How do I restrict a Bicep parameter to a fixed list of allowed values?", "mustContain": "@allowed" },
+    { "q": "What is a symbolic name in Bicep and how does it differ from the resource name?", "mustContain": "symbolic name" },
+    { "q": "What are the naming rules for an Azure storage account name?", "mustContain": "3 to 24 characters" },
+    { "q": "How does Bicep know the App Service app depends on the App Service plan?", "mustContain": "implicit dependency" },
+    { "q": "Which storage SKU is used for prod versus other environments?", "mustContain": "standard_grs" },
+    { "q": "What tools do I need to install to get started with Bicep?", "mustContain": "azure cli" },
+    { "q": "How do I reference another Bicep file as a module?", "mustContain": "module myModule" },
+    { "q": "How can I verify a deployment from the command line?", "mustContain": "az deployment group list" }
+  ],
+  "outOfScope": [
+    "How do I configure an NGINX ingress controller on Kubernetes?",
+    "What is the capital of France?",
+    "How do I train a neural network in PyTorch?"
+  ],
+  "failureQuestion": "Why did my deployment step fail?"
+}
